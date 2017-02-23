@@ -26,9 +26,9 @@ import java.util.*;
 /**
  * This class starts transmit to activation
  */
-public class ESPWrapper extends CordovaPlugin {
+public class MTKWrapper extends CordovaPlugin {
 
-    private static String TAG = "=====ESPWrapper.class====";
+    private static String TAG = "=====MTKWrapper.class====";
 
     private Context context;
     private String userName;
@@ -40,12 +40,6 @@ public class ESPWrapper extends CordovaPlugin {
     private String wifiSSID;
     private String ip;
     private String wifiKey;
-
-    private volatile boolean mIsInterrupt = false;
-    private volatile List<IEsptouchResult> mEsptouchResultList;
-    private volatile boolean mIsSuc = false;
-    private volatile Map<String, Integer> mBssidTaskSucCountMap;
-    private IEsptouchListener mEsptouchListener;
 
 
     private static int[][] desTables = new int[][]{{15, 12, 8, 2}, {13, 8, 10, 1}, {1, 10, 13, 0}, {3, 15, 0, 6}, {11, 8, 12, 7}, {4, 3, 2, 12}, {6, 11, 13, 8}, {2, 1, 14, 7}};

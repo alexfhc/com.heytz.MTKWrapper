@@ -17,6 +17,6 @@ exports.startSocket = function (ip,
         ]);
 };
 exports.dealloc = function () {
-    exec( null,null,"ESPWrapper", "dealloc",
+    exec( null,null,"MTKWrapper", "dealloc",
         []);
 };
