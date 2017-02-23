@@ -87,9 +87,6 @@ public class MTKWrapper extends CordovaPlugin {
                 return false;
             }
 
-            InetAddress localInetAddress = EspNetUtil.getLocalInetAddress(context);
-
-
             return true;
         }
         if (action.equals("startSocket")) {
@@ -99,25 +96,6 @@ public class MTKWrapper extends CordovaPlugin {
         }
 
         return false;
-    }
-
-    private boolean execute(IEsptouchGenerator generator) {
-
-        byte[][] gcBytes2 = generator.getGCBytes2();
-        byte[][] dcBytes2 = generator.getDCBytes2();
-
-        int index = 0;
-
-        mSocketClient.sendData(gcBytes2,
-                mParameter.getTargetHostname(),
-                mParameter.getTargetPort(),
-                mParameter.getIntervalGuideCodeMillisecond());
-//        mSocketClient.sendData(dcBytes2, index, dcBytes2.length,
-//                mParameter.getTargetHostname(),
-//                mParameter.getTargetPort(),
-//                mParameter.getIntervalDataCodeMillisecond());
-
-        return true;
     }
 
 
