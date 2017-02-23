@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.heytz.MTKWrapper" version="0.3.1" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <name>ESPWrapper</name>
+    <js-module name="MTKWrapper" src="www/MTKWrapper.js">
+        <clobbers target="cordova.plugins.MTKWrapper"/>
+    </js-module>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="ESPWrapper">
+                <param name="ios-package" value="ESPWrapper"/>
+            </feature>
+        </config-file>
+        <framework src="SystemConfiguration.framework"/>
+        <framework src="CFNetwork.framework"/>
+
+        <source-file src="src/ios/ESP_ByteUtil.h"/>
+        <source-file src="src/ios/ESP_ByteUtil.m"/>
+        <source-file src="src/ios/ESP_CRC8.m"/>
+        <source-file src="src/ios/ESP_CRC8.h"/>
+        <source-file src="src/ios/ESP_NetUtil.h"/>
+        <source-file src="src/ios/ESP_NetUtil.m"/>
+        <source-file src="src/ios/ESPAppDelegate.m"/>
+        <source-file src="src/ios/ESPAppDelegate.h"/>
+        <source-file src="src/ios/ESPDataCode.h"/>
+        <source-file src="src/ios/ESPDataCode.m"/>
+        <source-file src="src/ios/ESPDatumCode.m"/>
+        <source-file src="src/ios/ESPDatumCode.h"/>
+        <source-file src="src/ios/ESPGuideCode.h"/>
+        <source-file src="src/ios/ESPGuideCode.m"/>
+        <source-file src="src/ios/ESPTouchDelegate.h"/>
+        <source-file src="src/ios/ESPTouchGenerator.h"/>
+        <source-file src="src/ios/ESPTouchGenerator.m"/>
+        <source-file src="src/ios/ESPTouchResult.m"/>
+        <source-file src="src/ios/ESPTouchResult.h"/>
+        <source-file src="src/ios/ESPTouchTask.h"/>
+        <source-file src="src/ios/ESPTouchTask.m"/>
+        <source-file src="src/ios/ESPTouchTaskParameter.m"/>
+        <source-file src="src/ios/ESPTouchTaskParameter.h"/>
+        <source-file src="src/ios/ESPUDPSocketClient.h"/>
+        <source-file src="src/ios/ESPUDPSocketClient.m"/>
+        <source-file src="src/ios/ESPUDPSocketServer.m"/>
+        <source-file src="src/ios/ESPUDPSocketServer.h"/>
+        <source-file src="src/ios/ESPViewController.h"/>
+        <source-file src="src/ios/IPAddress.c"/>
+        <source-file src="src/ios/IPAddress.h"/>
+        <source-file src="src/ios/ESPWrapper.m"/>
+
+
+    </platform>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="MTKWrapper">
+                <param name="android-package" value="com.heytz.MTKWrapper.MTKWrapper"/>
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml"/>
+        <source-file src="src/android/MTKWrapper.java" target-dir="src/com/heytz/MTKWrapper"/>
+        <source-file src="libs/dd-plist.jar" target-dir="libs"/>
+        <source-file src="libs/jetty-8.1.15.jar" target-dir="libs"/>
+        <source-file src="libs/httpclient-4.5.1.jar" target-dir="libs"/>
+    </platform>
+</plugin>
