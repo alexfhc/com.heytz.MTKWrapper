@@ -99,7 +99,7 @@ public class MTKWrapper extends CordovaPlugin {
             public void run() {
                 try {
                     if (server == null) {
-                        server = new ServerSocket(8001);
+                        server = new ServerSocket(8000);
                     }
                     boolean wait = true;
                     while (wait) {
