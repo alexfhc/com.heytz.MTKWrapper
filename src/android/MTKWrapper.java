@@ -40,6 +40,7 @@ public class MTKWrapper extends CordovaPlugin {
     private String wifiSSID;
     private String ip;
     private String wifiKey;
+    private ElianNative elian;
 
 
     private static int[][] desTables = new int[][]{{15, 12, 8, 2}, {13, 8, 10, 1}, {1, 10, 13, 0}, {3, 15, 0, 6}, {11, 8, 12, 7}, {4, 3, 2, 12}, {6, 11, 13, 8}, {2, 1, 14, 7}};
@@ -75,6 +76,7 @@ public class MTKWrapper extends CordovaPlugin {
             devicePassword = args.getString(7);
             String isSsidHiddenStr = "NO";
             String taskResultCountStr = "1";
+            elian = new ElianNative();
 
             if (wifiSSID == null || wifiSSID.length() == 0 ||
                     wifiKey == null || wifiKey.length() == 0 ||
