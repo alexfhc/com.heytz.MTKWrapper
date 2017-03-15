@@ -1,4 +1,4 @@
-package com.heytz.MTKWrapper;
+package com.mediatek.elian;
 
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -49,6 +49,7 @@ public class MTKWrapper extends CordovaPlugin {
     private ServerSocket server = null;
     private Socket socket;
     private BufferedReader sendBack;
+    private boolean wait;
 
     private static int[][] desTables = new int[][]{{15, 12, 8, 2}, {13, 8, 10, 1}, {1, 10, 13, 0}, {3, 15, 0, 6}, {11, 8, 12, 7}, {4, 3, 2, 12}, {6, 11, 13, 8}, {2, 1, 14, 7}};
     private Handler mHandler;
@@ -67,6 +68,10 @@ public class MTKWrapper extends CordovaPlugin {
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
         context = cordova.getActivity().getApplicationContext();
+        mHandler = new Handler() {
+
+        };
+
     }
 
     @Override
@@ -76,13 +81,17 @@ public class MTKWrapper extends CordovaPlugin {
             wifiSSID = getSSID();
             password = args.getString(0);
             ip = intToIp(getMobileIP());
+            mHandler.postDelayed(timeoutRun, 20000L);
+
+            boolean result = ElianNative.LoadLib();
+
             elian = new ElianNative();
-            try {
-                startSocketServer();
-                startSmartConnection(wifiSSID, password, ip);
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
+            int libVersion = elian.GetLibVersion();
+            int protoVersion = elian.GetProtoVersion();
+//            startSocketServer();
+//            elian.InitSmartConnection(null, 0, 1);
+//            elian.StartSmartConnection(wifiSSID, password, ip);
+//            startSmartConnection(wifiSSID, password, ip);
             return true;
         }
         if (action.equals("startSocket")) {
@@ -90,12 +99,24 @@ public class MTKWrapper extends CordovaPlugin {
             return true;
         }
         if (action.equals("dealloc")) {
-            MTKCallbackContext = callbackContext;
             stopSmartConnection();
+            mHandler.removeCallbacks(timeoutRun);
             return true;
         }
         return false;
     }
+
+    private Runnable timeoutRun = new Runnable() {
+        public void run() {
+            stopSmartConnection();
+            wait = false;
+            if (server != null) {
+                server = null;
+                socket = null;
+            }
+            MTKCallbackContext.error("timeout");
+        }
+    };
 
     private void startSocketServer() {
         new Thread(new Runnable() {
@@ -105,7 +126,7 @@ public class MTKWrapper extends CordovaPlugin {
                     if (server == null) {
                         server = new ServerSocket(8000);
                     }
-                    boolean wait = true;
+                    wait = true;
                     while (wait) {
                         socket = server.accept();
                         sendBack = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -141,15 +162,15 @@ public class MTKWrapper extends CordovaPlugin {
             }
         }).start();
     }
+
     private void stopSmartConnection() {
         try {
             if (elian != null)
                 elian.StopSmartConnection();
-            MTKCallbackContext.success("deallocate");
         } catch (Exception e) {
-            MTKCallbackContext.error("deallocate failed");
         }
     }
+
     private int getMobileIP() {
         try {
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -173,6 +194,7 @@ public class MTKWrapper extends CordovaPlugin {
             return "";
         }
     }
+
     private String intToIp(int ipInt) {
         return new StringBuilder().append(((ipInt >> 24) & 0xff)).append('.')
                 .append((ipInt >> 16) & 0xff).append('.').append(

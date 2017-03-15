@@ -1,4 +1,4 @@
-package com.heytz.MTKWrapper;
+package com.mediatek.elian;
 
 /**
  * Created by yangyuan on 12/17/14.
