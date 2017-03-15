@@ -170,7 +170,7 @@ public class MTKWrapper extends CordovaPlugin {
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
-            return 0;
+            return "";
         }
     }
     private String intToIp(int ipInt) {
