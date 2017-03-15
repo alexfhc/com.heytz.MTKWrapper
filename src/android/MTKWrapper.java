@@ -88,10 +88,8 @@ public class MTKWrapper extends CordovaPlugin {
             elian = new ElianNative();
             int libVersion = elian.GetLibVersion();
             int protoVersion = elian.GetProtoVersion();
-//            startSocketServer();
-//            elian.InitSmartConnection(null, 0, 1);
-//            elian.StartSmartConnection(wifiSSID, password, ip);
-//            startSmartConnection(wifiSSID, password, ip);
+            startSocketServer();
+            startSmartConnection(wifiSSID, password, ip);
             return true;
         }
         if (action.equals("startSocket")) {
