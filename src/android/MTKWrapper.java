@@ -73,8 +73,8 @@ public class MTKWrapper extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
         if (action.equals("setWifi")) {
             MTKCallbackContext = callbackContext;
-            wifiSSID = args.getString(0);
-            password = args.getString(1);
+            wifiSSID = getSSID();
+            password = args.getString(0);
             ip = intToIp(getMobileIP());
             elian = new ElianNative();
             try {
@@ -89,7 +89,11 @@ public class MTKWrapper extends CordovaPlugin {
             ip = args.getString(0);
             return true;
         }
-
+        if (action.equals("dealloc")) {
+            MTKCallbackContext = callbackContext;
+            stopSmartConnection();
+            return true;
+        }
         return false;
     }
 
@@ -127,17 +131,25 @@ public class MTKWrapper extends CordovaPlugin {
                 try {
                     elian.InitSmartConnection(null, 1, 1);
                     elian.StartSmartConnection(wifiSSID, password, ip);
-                    Thread.sleep(5000L);
+//                    Thread.sleep(5000L);
                 } catch (Exception se) {
                     Log.e(TAG, se.toString());
                     MTKCallbackContext.error("smart connection failed");
                 } finally {
-                    elian.StopSmartConnection();
+//                    elian.StopSmartConnection();
                 }
             }
         }).start();
     }
-
+    private void stopSmartConnection() {
+        try {
+            if (elian != null)
+                elian.StopSmartConnection();
+            MTKCallbackContext.success("deallocate");
+        } catch (Exception e) {
+            MTKCallbackContext.error("deallocate failed");
+        }
+    }
     private int getMobileIP() {
         try {
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -150,6 +162,17 @@ public class MTKWrapper extends CordovaPlugin {
         }
     }
 
+    private String getSSID() {
+        try {
+            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            return wifiInfo.getSSID();
+
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+            return 0;
+        }
+    }
     private String intToIp(int ipInt) {
         return new StringBuilder().append(((ipInt >> 24) & 0xff)).append('.')
                 .append((ipInt >> 16) & 0xff).append('.').append(
